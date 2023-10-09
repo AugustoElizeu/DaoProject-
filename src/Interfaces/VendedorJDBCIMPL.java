@@ -30,7 +30,7 @@ public class VendedorJDBCIMPL implements VendedorDao{
                     Statement.RETURN_GENERATED_KEYS);
             st.setString(1,obj.getName());
             st.setString(2,obj.getEmail());
-            st.setString(3,new java.sql.Date(obj.getData().getTime()));
+            st.setDate(3, new java.sql.Date(obj.getData().getTime()));
             st.setDouble(4,obj.getSalaray());
             st.setInt(5,obj.getDep().getId());
             int rowsaffected = st.executeUpdate();
@@ -62,7 +62,7 @@ public class VendedorJDBCIMPL implements VendedorDao{
                     Statement.RETURN_GENERATED_KEYS);
             st.setString(1,obj.getName());
             st.setString(2,obj.getEmail());
-            st.setString(3,new java.sql.Date(obj.getData().getTime()));
+            st.setDate(3,new java.sql.Date(obj.getData().getTime()));
             st.setDouble(4,obj.getSalaray());
             st.setInt(5,obj.getDep().getId());
             st.setInt(6,obj.getID());
@@ -129,10 +129,9 @@ public class VendedorJDBCIMPL implements VendedorDao{
         obj.setDep(dep);
         return obj;
     }
-
     private Departamento instantiateDepartament(ResultSet rs) throws SQLException {
-        Departamento dep =new Departamento();
-        dep.setId(rs.getInt("DepartamentID"));
+        Departamento dep = new Departamento();
+        dep.setId(rs.getInt("DepartmentId"));
         dep.setName(rs.getString("DepName"));
         return dep;
     }
@@ -172,18 +171,16 @@ public class VendedorJDBCIMPL implements VendedorDao{
 
 
     }
-
-    @Override
     public List<Vendedor> findByDepartament(Departamento dep){
         PreparedStatement st = null;
         ResultSet rs = null;
         try{
             st = conn.prepareStatement(
                     "SELECT seller.*,department.Name as DepName "
-                    + "FROM seller INNER JOIN department"
-                    + "ON seller.DepartmentId = department.Id"
-                    + "WHERE DepartmentId = ?"
-                    + "ORDER BY Name");
+                            + "FROM seller INNER JOIN department"
+                            + "ON seller.DepartmentId = department.Id"
+                            + "WHERE DepartmentId = ?"
+                            + "ORDER BY Name");
             st.setInt(1,dep.getId());
             rs= st.executeQuery();
 
@@ -206,7 +203,5 @@ public class VendedorJDBCIMPL implements VendedorDao{
             Connect.closeStatement(st);
             Connect.closeResultSet(rs);
         }
-
-
     }
 }
